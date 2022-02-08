@@ -28,8 +28,15 @@ class PersonalisedStructBlock(blocks.StructBlock):
         :type context: dict
         :returns: The provided block if matched, otherwise an empty string
         :rtype: blocks.StructBlock or empty str
-
         """
+        
+        """
+        fix for block-level personalisation 'NoneType' context error
+        """
+        if context is None or 'request' not in context:
+             return super(PersonalisedStructBlock, self).render(
+                 value, context)
+        
         request = context['request']
         adapter = get_segment_adapter(request)
         user_segments = adapter.get_segments()

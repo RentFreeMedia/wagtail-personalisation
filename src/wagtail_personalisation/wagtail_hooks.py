@@ -9,7 +9,6 @@ from django.template.defaultfilters import pluralize
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin import messages
 from wagtail.admin.site_summary import PagesSummaryItem, SummaryItem
 
@@ -170,7 +169,7 @@ def page_listing_more_buttons(page, page_perms, is_parent=False, *args):
             "%s variant" % (vm.segment.name),
             reverse("wagtailadmin_pages:edit", args=[vm.variant_id]),
             attrs={"title": _("Edit this variant")},
-            classes=("icon", "icon-fa-pencil"),
+            classes=("icon", "edit"),
             priority=0,
         )
 
@@ -179,7 +178,7 @@ def page_listing_more_buttons(page, page_perms, is_parent=False, *args):
             "%s variant" % (segment.name),
             reverse("segment:copy_page", args=[page.pk, segment.pk]),
             attrs={"title": _("Create this variant")},
-            classes=("icon", "icon-fa-plus"),
+            classes=("icon", "plus"),
             priority=100,
         )
 
@@ -187,7 +186,7 @@ def page_listing_more_buttons(page, page_perms, is_parent=False, *args):
         _("Create a new segment"),
         reverse("wagtail_personalisation_segment_modeladmin_create"),
         attrs={"title": _("Create a new segment")},
-        classes=("icon", "icon-fa-snowflake-o"),
+        classes=("icon", "group"),
         priority=200,
     )
 
@@ -244,7 +243,7 @@ class SegmentSummaryPanel(SummaryItem):
         title = _("Segments")
         return mark_safe(
             """
-            <li class="icon icon-fa-snowflake-o">
+            <li class="icon icon-group">
                 <a href="{}"><span>{}</span>{}</a>
             </li>""".format(
                 target_url, segment_count, title
@@ -262,7 +261,7 @@ class PersonalisedPagesSummaryPanel(PagesSummaryItem):
         title = _("Personalised Page")
         return mark_safe(
             """
-            <li class="icon icon-fa-file-o">
+            <li class="icon icon-doc-empty">
                 <span>{}</span>{}{}
             </li>""".format(
                 page_count, title, pluralize(page_count)
@@ -280,7 +279,7 @@ class VariantPagesSummaryPanel(PagesSummaryItem):
         title = _("Variant")
         return mark_safe(
             """
-                <li class="icon icon-fa-files-o">
+                <li class="icon icon-doc-full">
                     <span>{}</span>{}{}
                 </li>""".format(
                 page_count, title, pluralize(page_count)

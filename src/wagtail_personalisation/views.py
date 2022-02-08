@@ -79,7 +79,7 @@ class SegmentModelAdmin(ModelAdmin):
     index_view_class = SegmentModelIndexView
     dashboard_view_class = SegmentModelDashboardView
     delete_view_class = SegmentModelDeleteView
-    menu_icon = 'fa-snowflake-o'
+    menu_icon = 'group'
     add_to_settings_menu = False
     list_display = ('name', 'persistent', 'match_any', 'status',
                     'page_count', 'variant_count', 'statistics')
