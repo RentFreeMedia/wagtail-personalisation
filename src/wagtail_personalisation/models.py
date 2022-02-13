@@ -1,5 +1,5 @@
 import random
-
+import uuid
 import wagtail
 from django import forms
 from django.conf import settings
@@ -259,11 +259,27 @@ class PersonalisablePageMetadata(ClusterableModel):
         """
         return self.canonical_page_id == self.variant_id
 
-    def copy_for_segment(self, segment):
+    def copy_for_segment(self, segment, exclude_fields=None):
+        exclude_fields_in_copy = [
+            'comments', 
+            'episode_type', 
+            'guid', 
+            'remote_media', 
+            'remote_media_duration', 
+            'remote_media_thumbnail', 
+            'remote_media_type', 
+            'remote_media_size', 
+            'uploaded_media', 
+            'uploaded_media_type',
+            'tagged_items',
+            'search_description'
+        ]
+        default_exclude_fields_in_copy = ['id', 'comments', 'guid']
+        exclude_fields = default_exclude_fields_in_copy + exclude_fields_in_copy +(exclude_fields or [])
         page = self.canonical_page
-
         slug = "{}-{}".format(page.slug, segment.encoded_name())
         title = "{} ({})".format(page.title, segment.name)
+        guid =  str(uuid.uuid4())
         update_attrs = {
             'title': title,
             'slug': slug,
@@ -272,7 +288,7 @@ class PersonalisablePageMetadata(ClusterableModel):
 
         with transaction.atomic():
             new_page = self.canonical_page.copy(
-                update_attrs=update_attrs, copy_revisions=False)
+                update_attrs=update_attrs, copy_revisions=False, exclude_fields=exclude_fields)
 
             PersonalisablePageMetadata.objects.create(
                 canonical_page=page,
