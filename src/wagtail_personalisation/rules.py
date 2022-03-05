@@ -42,7 +42,7 @@ def get_geoip_module():
 
 class AbstractBaseRule(models.Model):
     """Base for creating rules to segment users with."""
-    icon = 'fa-circle-o'
+    icon = 'radio-empty'
     static = False
 
     segment = ParentalKey(
@@ -93,7 +93,7 @@ class TimeRule(AbstractBaseRule):
     set start time and end time.
 
     """
-    icon = 'fa-clock-o'
+    icon = 'time'
 
     start_time = models.TimeField(_("Starting time"))
     end_time = models.TimeField(_("Ending time"))
@@ -128,7 +128,7 @@ class DayRule(AbstractBaseRule):
     set in the rule.
 
     """
-    icon = 'fa-calendar-check-o'
+    icon = 'date'
 
     mon = models.BooleanField(_("Monday"), default=False)
     tue = models.BooleanField(_("Tuesday"), default=False)
@@ -177,7 +177,7 @@ class ReferralRule(AbstractBaseRule):
     the set regex test.
 
     """
-    icon = 'fa-globe'
+    icon = 'site'
 
     regex_string = models.TextField(
         _("Regular expression to match the referrer"))
@@ -214,7 +214,7 @@ class VisitCountRule(AbstractBaseRule):
     when visiting the set page.
 
     """
-    icon = 'fa-calculator'
+    icon = 'order'
     static = True
 
     OPERATOR_CHOICES = (
@@ -336,7 +336,7 @@ class QueryRule(AbstractBaseRule):
     present in the request query.
 
     """
-    icon = 'fa-link'
+    icon = 'link'
 
     parameter = models.SlugField(_("The query parameter to search for"),
                                  max_length=20)
@@ -372,7 +372,7 @@ class DeviceRule(AbstractBaseRule):
     in the request user agent headers.
 
     """
-    icon = 'fa-tablet'
+    icon = 'placeholder'
 
     mobile = models.BooleanField(_("Mobile phone"), default=False)
     tablet = models.BooleanField(_("Tablet"), default=False)
@@ -407,7 +407,7 @@ class UserIsLoggedInRule(AbstractBaseRule):
     Matches when the user is authenticated.
 
     """
-    icon = 'fa-user'
+    icon = 'user'
 
     is_logged_in = models.BooleanField(default=False)
 
@@ -439,6 +439,8 @@ class OriginCountryRule(AbstractBaseRule):
     Using this rule requires setting up GeoIP2 on Django or using
     CloudFlare or CloudFront geolocation detection.
     """
+    icon = 'image'
+
     country = models.CharField(
         max_length=2, choices=COUNTRY_CHOICES,
         help_text=_("Select origin country of the request that this rule will "
